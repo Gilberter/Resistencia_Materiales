@@ -6,6 +6,7 @@ import io
 def main():
     st.set_page_config(page_title="Resistencia de Materiales", layout="wide")
 
+
     st.title("⚙️Proyecto Resistencia de Materiales⚙️")
 
     st.subheader("Estudiantes: Nichol Jimenez - Lia Gomez - Laura Corzo")
