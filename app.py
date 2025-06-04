@@ -12,7 +12,7 @@ st.set_page_config(page_title="Resistencia de Materiales", layout="wide")
 st.title("⚙️ Proyecto Resistencia de Materiales ⚙️")
 st.markdown(theory_text)
 
-<<<<<<< HEAD
+
 st.sidebar.header("🔩 Parámetros de cálculo")
 pot = st.sidebar.number_input("Potencia (W)", min_value=0.1)
 vel = st.sidebar.number_input("Velocidad de rotación (rpm)", min_value=0.1)
@@ -23,10 +23,6 @@ tension_max = st.sidebar.number_input("Tensión máxima permitida (MPa)", min_va
 diametro_min = st.sidebar.number_input("Diámetro mínimo (mm)", min_value=1.0, value=10.0)
 diametro_max = st.sidebar.number_input("Diámetro máximo (mm)", min_value=diametro_min, value=100.0)
 paso = st.sidebar.number_input("Paso (mm)", min_value=0.1, value=1.0)
-=======
-
-    st.title("⚙️Proyecto Resistencia de Materiales⚙️")
->>>>>>> 6ebe0e9c38e427fb48ca40b0239c353b24cdc47c
 
 if st.sidebar.button("🔢 Calcular y Graficar"):
     props = materiales[material_usar]
