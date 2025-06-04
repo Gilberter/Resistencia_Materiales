@@ -4,25 +4,33 @@ import matplotlib.pyplot as plt
 from logic import *
 from materials import materiales
 from theory import theory_text
-import requests
 import pandas as pd
-
 
 st.set_page_config(page_title="Resistencia de Materiales", layout="wide")
 st.title("⚙️ Proyecto Resistencia de Materiales ⚙️")
 st.markdown(theory_text)
 
-
 st.sidebar.header("🔩 Parámetros de cálculo")
-pot = st.sidebar.number_input("Potencia (W)", min_value=0.1)
-vel = st.sidebar.number_input("Velocidad de rotación (rpm)", min_value=0.1)
-longitud = st.sidebar.number_input("Longitud del eje (mm)", min_value=1.0)
+pot = st.sidebar.number_input("Potencia (W)", min_value=0.01, value=10.0, step=1.0)
+vel = st.sidebar.number_input("Velocidad de rotación (rpm)", min_value=0.01, value=100.0, step=1.0)
+longitud = st.sidebar.number_input("Longitud del eje (mm)", min_value=0.01, value=100.0, step=1.0)
 material_usar = st.sidebar.selectbox("Material", list(materiales.keys()))
 fs_objetivo = st.sidebar.number_input("FS objetivo", min_value=1.0, value=2.0)
-tension_max = st.sidebar.number_input("Tensión máxima permitida (MPa)", min_value=1.0, value=100.0)
-diametro_min = st.sidebar.number_input("Diámetro mínimo (mm)", min_value=1.0, value=10.0)
-diametro_max = st.sidebar.number_input("Diámetro máximo (mm)", min_value=diametro_min, value=100.0)
-paso = st.sidebar.number_input("Paso (mm)", min_value=0.1, value=1.0)
+tension_max = st.sidebar.number_input("Tensión máxima permitida (MPa)", min_value=0.01, value=100.0)
+diametro_min = st.sidebar.number_input("Diámetro mínimo (mm)", min_value=0.01, value=10.0)
+diametro_max = st.sidebar.number_input("Diámetro máximo (mm)", min_value=0.01, value=100.0)
+paso = st.sidebar.number_input("Paso (mm)", min_value=0.01, value=1.0)
+
+# Validaciones adicionales
+if diametro_min > diametro_max:
+    st.sidebar.error("El diámetro mínimo no puede ser mayor que el máximo.")
+    st.stop()
+if pot <= 0 or vel <= 0 or longitud <= 0 or tension_max <= 0 or diametro_min <= 0 or diametro_max <= 0 or paso <= 0:
+    st.sidebar.error("Todos los valores deben ser mayores que cero.")
+    st.stop()
+if paso > (diametro_max - diametro_min):
+    st.sidebar.error("El paso es demasiado grande para el rango de diámetros.")
+    st.stop()
 
 if st.sidebar.button("🔢 Calcular y Graficar"):
     props = materiales[material_usar]
@@ -65,19 +73,12 @@ if st.sidebar.button("🔢 Calcular y Graficar"):
 
     st.pyplot(fig)
 
-    # Mostrar resultados para el diámetro seleccionado
+    # Mostrar resultados para el diámetro mínimo
     st.subheader("Resultados para el diámetro mínimo")
     st.markdown(f"- **Torque:** {torques:.2f} Nm")
     st.markdown(f"- **Tensión cortante:** {tensiones[0]:.2f} MPa")
     st.markdown(f"- **Deformación angular:** {deformaciones[0]:.6f} rad")
     st.markdown(f"- **Factor de seguridad:** {fs_list[0]:.2f}")
-
-    # Animación (opcional, requiere instalar streamlit-lottie y un archivo .json de animación)
-    # from streamlit_lottie import st_lottie
-    # import requests
-    # lottie_url = "https://assets10.lottiefiles.com/packages/lf20_2ks3pjua.json"
-    # lottie_json = requests.get(lottie_url).json()
-    # st_lottie(lottie_json, height=200, key="torsion_anim")
 
     st.info("Puedes ajustar los parámetros para ver cómo cambian los resultados y las gráficas.")
 
@@ -97,5 +98,17 @@ if st.sidebar.button("🔢 Calcular y Graficar"):
         })
     df = pd.DataFrame(data)
     st.dataframe(df)
+
+    # Plot de comparación de materiales
+    st.subheader("Gráfico: FS de materiales para diámetro mínimo")
+    fig2, ax2 = plt.subplots(figsize=(8, 4))
+    ax2.bar(df["Material"], df["FS"], color='skyblue')
+    ax2.axhline(fs_objetivo, color='r', linestyle='--', label="FS objetivo")
+    ax2.set_ylabel("Factor de Seguridad")
+    ax2.set_xlabel("Material")
+    ax2.set_title("FS de materiales para diámetro mínimo")
+    ax2.legend()
+    plt.xticks(rotation=30, ha='right')
+    st.pyplot(fig2)
 
 st.sidebar.markdown("---")
