@@ -1,2 +1,4 @@
 matplotlib
-fenics
+numpy
+pandas
+streamlit
