@@ -18,10 +18,12 @@ def polar_moment_iner(diametro):
     return (np.pi * (diametro ** 4)) / 32
 
 def ten_cortante_fun(torque, radio, polar_moment):
-    return (torque * radio) / polar_moment
+    torque_nmm = torque * 1000  # Convertir Nm a Nmm
+    return (torque_nmm * radio) / polar_moment
 
 def angular_deformation(torque, longitud, polar_moment, rigidez):
-    return (torque * longitud) / (polar_moment * rigidez)
+    torque_nmm = torque * 1000  # Convertir Nm a Nmm
+    return (torque_nmm * longitud) / (polar_moment * rigidez)
 
 def fact_security(limite_elastico, tension_max):
     return limite_elastico / tension_max

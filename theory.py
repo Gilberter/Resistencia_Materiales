@@ -3,6 +3,13 @@ theory_text = """
 
 La torsión es el esfuerzo que se produce cuando se aplica un momento de fuerza (torque) a un eje. Los conceptos clave son:
 
+- La relación de transmisión entre dos piñones se define como:
+  $$
+  \\text{Relación de Transmisión} = \\frac{N_{\\text{conducido}}}{N_{\\text{conductor}}}
+  $$
+  donde $N_{\\text{conducido}}$ es el número de dientes del piñón conducido y $N_{\\text{conductor}}$ es el número de dientes del piñón conductor.
+
+
 - **Torque (T):** Es la fuerza que hace girar el eje. Se calcula como:
   $$
   T = \\frac{P \\cdot 60}{2\\pi N}
